@@ -140,10 +140,10 @@ public class SpringbootTests {
         // ==> Parameters:
 
         // 构建器同样支持链式调用
-        wrapper.eq("uname", "testName2").or().like("rname","abc");
+        wrapper.eq("uname", "testName2").or().like("rname", "abc");
         // ==> Preparing: DELETE FROM mh_users WHERE uname = ? OR rname LIKE ?
         // ==> Parameters: testName2(String), testName2(String), %(String)
-        
+
         // 构建器中的第一个参数 boolean condition表示是否将此条sql语句加入要执行的语句中
 
         // 具体结构 => src/resources/static/Wrapper结构.png
@@ -180,7 +180,7 @@ public class SpringbootTests {
 
     //************************************************** SELECT *****************************************************
 
-            //****************************************** GET *****************************************************
+    //****************************************** GET *****************************************************
 
     public void getById() {
         Users user = usersService.getById(5074);
@@ -189,21 +189,115 @@ public class SpringbootTests {
         p(user);
     }
 
-    @Test
     public void getOne() {
         QueryWrapper<Users> wrapper = new QueryWrapper<>();
         wrapper.like("rname", "名称1");
         Users user = usersService.getOne(wrapper);
         // SELECT ids,uname,pword,rname,pic,userType,homeid,setups,status,createtime,
         // creator,createname,updatetime,updator,updatename FROM mh_users WHERE rname LIKE ?
+        // 如果获取多条记录, 取第一个
         p(user);
     }
+
+    public void getOne2() {
+        QueryWrapper<Users> wrapper = new QueryWrapper<>();
+        wrapper.like("rname", "名称1");
+        Users user = usersService.getOne(wrapper, true);
+        // 为false时, 在查询一条记录却返回多条记录时给与一个警告, 为true时忽略此警告
+        // SELECT ids,uname,pword,rname,pic,userType,homeid,setups,status,createtime,creator,createname,
+        // updatetime,updator,updatename FROM mh_users WHERE rname LIKE ?
+        p(user);
+    }
+
+    public void getMap() {
+        QueryWrapper<Users> wrapper = new QueryWrapper<>();
+        wrapper.eq("rname", "赵大帅");
+        Map<String, Object> user = usersService.getMap(wrapper);
+        // 将数据库表中不为null的字段组成一个Map返回
+        // SELECT ids,uname,pword,rname,pic,userType,homeid,setups,status,createtime,creator,createname,
+        // updatetime,updator,updatename FROM mh_users WHERE rname = ?
+        p(user);
+    }
+
+    public void getObj() {
+        QueryWrapper<Users> wrapper = new QueryWrapper<>();
+        wrapper.eq("rname", "赵大帅");
+        Object user = usersService.getObj(wrapper);
+        // 将数据库表中所有的字段以Object的形式返回, 并在返回多条时给与警告, 其实返回的还是一个实体类对象
+        // SELECT ids,uname,pword,rname,pic,userType,homeid,setups,status,createtime,creator,createname,
+        // updatetime,updator,updatename FROM mh_users WHERE rname = ?
+        p(user);
+    }
+
+    //****************************************** LIST *****************************************************
+
+    public void list() {
+        List<Users> list = usersService.list();
+        // SELECT ids,uname,pword,rname,pic,userType,homeid,setups,status,createtime,
+        // creator,createname,updatetime,updator,updatename FROM mh_users
+        p(list);
+    }
+
+    public void list2() {
+        QueryWrapper<Users> wrapper = new QueryWrapper<>();
+        wrapper.eq("rname", "赵大帅");
+        List<Users> list = usersService.list(wrapper);
+        // SELECT ids,uname,pword,rname,pic,userType,homeid,setups,status,createtime,
+        // creator,createname,updatetime,updator,updatename FROM mh_users WHERE rname = ?
+        p(list);
+    }
+
+    @Test
+    public void listByIds() {
+        List<Integer> ids = new ArrayList<>();
+        ids.add(1);
+        ids.add(2);
+        ids.add(3);
+        Collection<Users> c = usersService.listByIds(ids);
+        // SELECT ids,uname,pword,rname,pic,userType,homeid,setups,status,createtime,creator,
+        // createname,updatetime,updator,updatename FROM mh_users WHERE ids IN ( ? , ? , ? )
+        p(c);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public static void p(boolean flag) {
         if (flag) {
             System.out.println("执行成功 !");
         } else {
             System.out.println("执行失败 !");
+        }
+    }
+
+    public static void p(List<?> list) {
+        if (list != null && list.size() > 0) {
+            for (Object o : list) {
+                System.out.println(o);
+            }
         }
     }
 
