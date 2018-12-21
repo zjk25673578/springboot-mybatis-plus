@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>用户列表</title>
+</head>
+<body>
+<h2>用户列表</h2>
+<div>
+    <ul>
+        <li th:each="user:${users}">
+            <span th:text="${user.ids}"></span>-
+            <span th:text="${user.uname}"></span>-
+            <span th:text="${user.rname}"></span>-
+            <span th:text="${user.createtime}"></span>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

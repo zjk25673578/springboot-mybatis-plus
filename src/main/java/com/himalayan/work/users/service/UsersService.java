@@ -1,7 +1,9 @@
 package com.himalayan.work.users.service;
 
-import com.himalayan.work.users.model.Users;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.himalayan.work.users.model.Users;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,5 +15,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface UsersService extends IService<Users> {
 
-    Integer newCount();
+    List<Users> list(Users user);
 }

@@ -1,5 +1,6 @@
 package com.himalayan.app;
 
+import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -19,9 +20,8 @@ public class SpringbootApplication {
     @Bean
     public PaginationInterceptor paginationInterceptor() {
         PaginationInterceptor page = new PaginationInterceptor();
-        page.setDialectType("mysql");
+        page.setDialectType(DbType.MYSQL.getDb());
         return page;
     }
-
 }
 
