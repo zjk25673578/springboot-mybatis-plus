@@ -34,6 +34,7 @@ public class UsersController {
     public ModelAndView users(Users user, ModelAndView mav) {
         List<Users> list = usersService.list(user);
         mav.addObject("users", list);
+        mav.addObject("url", "https://www.sohu.com");
         mav.setViewName("users/list");
         return mav;
     }
