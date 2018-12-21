@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -23,16 +24,17 @@ public class UsersController {
     @Autowired
     private UsersService usersService;
 
-    @GetMapping(value = "/users.html")
     public String users(Users user, Model mav) {
         List<Users> list = usersService.list(user);
         mav.addAttribute("users", list);
         return "users/list";
     }
-    /*public ModelAndView users(Users user, ModelAndView mav) {
+
+    @GetMapping(value = "/users.html")
+    public ModelAndView users(Users user, ModelAndView mav) {
         List<Users> list = usersService.list(user);
         mav.addObject("users", list);
         mav.setViewName("users/list");
         return mav;
-    }*/
+    }
 }
