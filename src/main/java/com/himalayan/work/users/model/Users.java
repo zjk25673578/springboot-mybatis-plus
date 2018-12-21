@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.himalayan.util.ModelParent;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.ToString;
+import lombok.experimental.FieldNameConstants;
 
 /**
  * <p>
@@ -16,6 +17,13 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @TableName("mh_users")
 public class Users extends ModelParent {
+
+    public Users() {
+    }
+
+    public Users(Integer ids) {
+        super.setIds(ids);
+    }
 
     private static final long serialVersionUID = 1L;
 
@@ -67,6 +75,7 @@ public class Users extends ModelParent {
     public void setUname(String uname) {
         this.uname = uname;
     }
+
     public String getPword() {
         return pword;
     }
@@ -74,6 +83,7 @@ public class Users extends ModelParent {
     public void setPword(String pword) {
         this.pword = pword;
     }
+
     public String getRname() {
         return rname;
     }
@@ -81,6 +91,7 @@ public class Users extends ModelParent {
     public void setRname(String rname) {
         this.rname = rname;
     }
+
     public String getPic() {
         return pic;
     }
@@ -88,6 +99,7 @@ public class Users extends ModelParent {
     public void setPic(String pic) {
         this.pic = pic;
     }
+
     public Integer getUserType() {
         return userType;
     }
@@ -95,6 +107,7 @@ public class Users extends ModelParent {
     public void setUserType(Integer userType) {
         this.userType = userType;
     }
+
     public Integer getHomeid() {
         return homeid;
     }
@@ -102,6 +115,7 @@ public class Users extends ModelParent {
     public void setHomeid(Integer homeid) {
         this.homeid = homeid;
     }
+
     public Integer getSetups() {
         return setups;
     }
@@ -109,6 +123,7 @@ public class Users extends ModelParent {
     public void setSetups(Integer setups) {
         this.setups = setups;
     }
+
     public Integer getStatus() {
         return status;
     }

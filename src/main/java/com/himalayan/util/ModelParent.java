@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import java.util.Date;
 
 public class ModelParent {
+
     @TableId(type = IdType.AUTO)
     private Integer ids;
 

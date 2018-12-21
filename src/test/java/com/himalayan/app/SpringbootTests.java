@@ -1,8 +1,11 @@
 package com.himalayan.app;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.himalayan.work.users.model.Users;
 import com.himalayan.work.users.service.UsersService;
 import org.junit.Before;
@@ -247,7 +250,20 @@ public class SpringbootTests {
         p(list);
     }
 
-    @Test
+    public void list3() {
+        Users user = new Users();
+        user.setUname("admin");
+        user.setPword("123456");
+
+        // Wrapper的另一种用法
+        // 可以根据传入的实体类的参数生成eq("","")的语句
+        QueryWrapper<Users> wrapper = new QueryWrapper<>(user);
+        List<Users> list = usersService.list(wrapper);
+        // SELECT ids,uname,pword,rname,pic,userType,homeid,setups,status,createtime,creator,createname,
+        // updatetime,updator,updatename FROM mh_users WHERE uname=? AND pword=?
+        p(list);
+    }
+
     public void listByIds() {
         List<Integer> ids = new ArrayList<>();
         ids.add(1);
@@ -259,30 +275,77 @@ public class SpringbootTests {
         p(c);
     }
 
+    public void listByMap() {
+        Map<String, Object> args = new HashMap<>();
+        args.put("uname", "Name1");
+        args.put("pword", 123123);
+        Collection<Users> c = usersService.listByMap(args);
+        // SELECT ids,uname,pword,rname,pic,userType,homeid,setups,status,createtime,creator,
+        // createname,updatetime,updator,updatename FROM mh_users WHERE uname = ? AND pword = ?
+        // 以Map作为条件查询
+        p(c);
+    }
 
+    public void listSearch() {
+        QueryWrapper<Users> wrapper = new QueryWrapper<>();
+        wrapper.like("uname", "Name1").eq("pword", 123123);
+        Collection<Users> c = usersService.list(wrapper);
+        // SELECT ids,uname,pword,rname,pic,userType,homeid,setups,status,createtime,creator,
+        // createname,updatetime,updator,updatename FROM mh_users WHERE uname LIKE ? AND pword = ?
+        p(c);
+        System.out.println(wrapper.getSqlSegment());
+    }
 
+    //****************************************** PAGE *****************************************************
 
+    public void page() {
+        // 查询数据列表
+        // private List<T> records = Collections.emptyList();
 
+        // 总数
+        // private long total = 0;
 
+        // 每页显示条数，默认 10
+        // private long size = 10;
 
+        // 当前页
+        // private long current = 1;
 
+        // SQL 排序 ASC 数组
+        // private String[] ascs;
 
+        // SQL 排序 DESC 数组
+        // private String[] descs;
 
+        // 自动优化 COUNT SQL
+        // private boolean optimizeCountSql = true;
 
+        // 是否进行 count 查询
+        // private boolean isSearchCount = true;
 
+        Page<Users> page = new Page<>();
+        page.setAsc("rname", "createtime");
+        page.setCurrent(3);
+        page.setSize(3);
 
+        QueryWrapper<Users> wrapper = new QueryWrapper<>();
+        wrapper.select("ids", "uname", "rname", "createtime").like("uname","Name1");
+        IPage<Users> p = usersService.page(page, wrapper);
 
+        // SELECT ids,uname,rname,createtime FROM mh_users
+        // WHERE uname LIKE ? ORDER BY rname ASC,createtime ASC LIMIT ?,?
 
+        System.out.println(JSON.toJSONString(p.getRecords()));
+        System.out.println(p.getTotal());
+    }
 
-
-
-
-
-
-
-
-
-
+    @Test
+    public void pageMaps() {
+        IPage<Map<String, Object>> p = usersService.pageMaps(new Page<>());
+        // SELECT ids,uname,pword,rname,pic,userType,homeid,setups,status,createtime,creator,
+        // createname,updatetime,updator,updatename FROM mh_users LIMIT ?,?
+        System.out.println(JSON.toJSONString(p));
+    }
 
 
     public static void p(boolean flag) {

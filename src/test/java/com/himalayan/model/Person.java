@@ -1,13 +1,16 @@
 package com.himalayan.model;
 
 import lombok.*;
+import lombok.experimental.FieldNameConstants;
 
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldNameConstants
 public class Person {
     @Setter
     @Getter
+    @FieldNameConstants.Include
     private String name;
     @Setter
     @Getter
