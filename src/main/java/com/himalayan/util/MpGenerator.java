@@ -54,22 +54,22 @@ public class MpGenerator {
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("root");
         dsc.setPassword("123456");
-        dsc.setUrl("jdbc:mysql://localhost:3306/myhome?useUnicode=true&characterEncoding=utf8");
+        dsc.setUrl("jdbc:mysql://localhost:3306/mydb?useUnicode=true&characterEncoding=utf8");
         mpg.setDataSource(dsc);
 
         // 策略配置
         StrategyConfig strategy = new StrategyConfig();
         strategy.setCapitalMode(false);// 全局大写命名 ORACLE 注意
-        strategy.setTablePrefix("mh");// 此处可以修改为您的表前缀(需要忽略的前缀)
+        // strategy.setTablePrefix("mh");// 此处可以修改为您的表前缀(需要忽略的前缀)
         strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
-        // strategy.setInclude("mh_users"); // 需要生成的表
+        strategy.setInclude("emp", "dept"); // 需要生成的表
         // strategy.setExclude("test"); // 排除生成的表
         /*=======================如果这个设置了这个属性, setActiveRecord(false)最好改为false==================*/
         /*======================或者让ModelParent这个类集成MybatisPlus里的Model==================*/
         // 自定义实体父类
-        strategy.setSuperEntityClass("com.himalayan.util.ModelParent");
+        // strategy.setSuperEntityClass("com.himalayan.util.ModelParent");
         // 自定义实体，公共字段
-        strategy.setSuperEntityColumns("ids", "createtime", "creator", "createname", "updatetime", "updator", "updatename");
+        // strategy.setSuperEntityColumns("ids", "createtime", "creator", "createname", "updatetime", "updator", "updatename");
         /*=====================================================================*/
         // 自定义 mapper 父类
         // strategy.setSuperMapperClass("com.baomidou.demo.TestMapper");

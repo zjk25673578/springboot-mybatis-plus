@@ -1,13 +1,12 @@
 package com.himalayan.app;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.himalayan.work.users.model.Users;
-import com.himalayan.work.users.service.UsersService;
+import com.himalayan.work.emp.model.Emp;
+import com.himalayan.work.emp.service.EmpService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @RunWith(SpringRunner.class)
@@ -22,129 +22,130 @@ import java.util.*;
 public class SpringbootTests {
 
     @Autowired
-    private UsersService usersService;
+    private EmpService empService;
 
-    private Users u;
-    private Users user;
-    private List<Users> userList;
+    private Emp e;
+    private Emp emp;
+    private List<Emp> empList;
 
     @Before
     public void before() {
-        u = new Users();
-        u.setUname("aaaa");
-        u.setPword("123123");
-        u.setRname("测试名称");
-        u.setUserType(1);
-        u.setSetups(1);
-        u.setStatus(1);
-        u.setCreatetime(new Date());
+        e = new Emp();
+        e.setEname("测试员工");
+        e.setSex(1);
+        e.setAge(25);
+        e.setHiredate(LocalDate.now());
+        e.setSal(200.36);
+        e.setComm(1200);
+        e.setDno(null);
 
-        userList = new ArrayList<>();
+
+        empList = new ArrayList<>();
         for (int i = 1; i <= 20; i++) {
-            user = new Users();
-            user.setUname("testName" + i);
-            user.setPword("123123");
-            user.setRname("测试名称" + i);
-            user.setUserType(1);
-            user.setSetups(1);
-            user.setStatus(1);
-            user.setCreatetime(new Date());
-            userList.add(user);
+            emp = new Emp();
+            emp.setEname("测试员工" + i);
+            emp.setSex(1);
+            emp.setAge(25);
+            emp.setHiredate(LocalDate.now());
+            emp.setSal(200.36);
+            emp.setComm(1200);
+            emp.setDno(null);
+            empList.add(emp);
         }
     }
 
     public void save() {
-        boolean r = usersService.save(u);
+        boolean r = empService.save(e);
         // 添加进数据库之后可以拿到主键
-        // INSERT INTO mh_users ( uname, pword, rname, userType, setups, status, createtime ) VALUES ( ?, ?, ?, ?, ?, ?, ? )
+        // INSERT INTO emp ( ename, sex, age, hiredate, sal, comm ) VALUES ( ?, ?, ?, ?, ?, ? )
         System.out.println(r);
-        System.out.println(u.getIds());
+        System.out.println(e.getEmpno());
     }
 
     //************************************************** SAVE_AND_UPDATE *****************************************************
 
     public void saveOrUpdate() {
-        // boolean r = usersService.saveOrUpdate(u);
-        // INSERT INTO mh_users ( uname, pword, rname, userType, setups, status, createtime ) VALUES ( ?, ?, ?, ?, ?, ?, ? )
+        // boolean r = empService.saveOrUpdate(e);
+        // INSERT INTO emp ( ename, sex, age, hiredate, sal, comm ) VALUES ( ?, ?, ?, ?, ?, ? )
 
-        u.setIds(6000);
-        u.setUname("newAccount");
-        boolean r = usersService.saveOrUpdate(u);
-        // SELECT ids,uname,pword,rname,pic,userType,homeid,setups,status,createtime,creator,
-        // createname,updatetime,updator,updatename FROM mh_users WHERE ids=?
+        e.setEmpno(2);
+        e.setEname("newName");
+        boolean r = empService.saveOrUpdate(e);
+        // SELECT empno,ename,sex,age,hiredate,sal,comm,dno FROM emp WHERE empno=?
 
-        // UPDATE mh_users SET uname=?, pword=?, rname=?, userType=?, setups=?, status=?, createtime=? WHERE ids=?
+        // UPDATE emp SET ename=?, sex=?, age=?, hiredate=?, sal=?, comm=? WHERE empno=?
 
         // 先判断实体类的主键, 如果主键不为空, 则进行一次查询, 查询结果仍然为空, 做添加操作
         // 但是返回的主键值依然以配置的主键生成策略优先
 
         System.out.println(r);
-        System.out.println(u.getIds());
+        System.out.println(e.getEmpno());
     }
 
     public void saveBatch() {
         // 循环调用
-        // INSERT INTO mh_users ( uname, pword, rname, userType, setups, status, createtime ) VALUES ( ?, ?, ?, ?, ?, ?, ? )
-        boolean r = usersService.saveBatch(userList);
-        for (Users user : userList) {
-            System.out.println(user.getIds());
+        // INSERT INTO emp ( ename, sex, age, hiredate, sal, comm ) VALUES ( ?, ?, ?, ?, ?, ? )
+        boolean r = empService.saveBatch(empList);
+        for (Emp emp : empList) {
+            System.out.println(emp.getEmpno());
         }
         p(r);
     }
 
     public void saveBatch2() {
         // 循环调用
-        // INSERT INTO mh_users ( uname, pword, rname, userType, setups, status, createtime ) VALUES ( ?, ?, ?, ?, ?, ?, ? )
+        // INSERT INTO emp ( ename, sex, age, hiredate, sal, comm ) VALUES ( ?, ?, ?, ?, ?, ? )
         // 每到i处, 先执行一下预编译的语句, i的值默认是1000
-        boolean r = usersService.saveBatch(userList, 1);
+        boolean r = empService.saveBatch(empList, 1);
+        p(r);
     }
 
     public void saveOrUpdateBatch() {
-        for (int i = 0; i < userList.size(); i++) {
-            Users user = userList.get(i);
+        for (int i = 0; i < empList.size(); i++) {
+            Emp emp = empList.get(i);
             if (i % 2 == 0) {
-                user.setIds(5055 + i);
-                user.setUname("saveOrUpdateBatch" + i);
+                emp.setEmpno(5055 + i);
+                emp.setEname("saveOrUpdateBatch" + i);
             }
         }
         // 同saveOrUpdate
-        boolean r = usersService.saveOrUpdateBatch(userList);
+        boolean r = empService.saveOrUpdateBatch(empList);
         p(r);
     }
 
     public void saveOrUpdateBatch2() {
-        for (int i = 0; i < userList.size(); i++) {
-            Users user = userList.get(i);
+        for (int i = 0; i < empList.size(); i++) {
+            Emp emp = empList.get(i);
             if (i % 2 == 0) {
-                user.setIds(5055 + i);
-                user.setUname("saveOrUpdateBatch" + i);
+                emp.setEmpno(5055 + i);
+                emp.setEname("saveOrUpdateBatch" + i);
             }
         }
         // 同saveBatch2
-        boolean r = usersService.saveOrUpdateBatch(userList, 1);
+        boolean r = empService.saveOrUpdateBatch(empList, 1);
         p(r);
     }
 
     //************************************************** REMOVE *****************************************************
 
     public void remove() {
-        UpdateWrapper<Users> wrapper = new UpdateWrapper<>();
+        UpdateWrapper<Emp> wrapper = new UpdateWrapper<>();
         // 根据调用的方法, 直接拼装sql语句
-        // wrapper.eq("uname", "testName2");
-        // ==> Preparing: DELETE FROM mh_users WHERE uname = ?
+        // wrapper.eq("ename", "testName2");
+        // ==> Preparing: DELETE FROM emp WHERE ename = ?
         // ==> Parameters: testName2(String)
 
-        // wrapper.apply("date_format(createtime, 'Y%-m%-d%')={0}", "2008-09-09"); // 推荐的做法
-        // ==> Preparing: DELETE FROM mh_users WHERE date_format(createtime, 'Y%-m%-d%')=?
+        // wrapper.apply("date_format(hiredate, 'Y%-m%-d%')={0}", "2008-09-09"); // 推荐的做法
+        // ==> Preparing: DELETE FROM emp WHERE date_format(hiredate, 'Y%-m%-d%')=?
         // ==> Parameters: 2008-09-09(String)
 
-        // wrapper.apply("date_format(createtime, 'Y%-m%-d%')='2008-09-09'"); // 不推荐的做法
-        // ==> Preparing: DELETE FROM mh_users WHERE date_format(createtime, 'Y%-m%-d%')='2008-09-09'
+        // wrapper.apply("date_format(hiredate, 'Y%-m%-d%')='2008-09-09'"); // 不推荐的做法
+        // ==> Preparing: DELETE FROM emp WHERE date_format(hiredate, 'Y%-m%-d%')='2008-09-09'
         // ==> Parameters:
 
         // 构建器同样支持链式调用
-        wrapper.eq("uname", "testName2").or().like("rname", "abc");
-        // ==> Preparing: DELETE FROM mh_users WHERE uname = ? OR rname LIKE ?
+        wrapper.eq("ename", "测试员工2").or().like("age", "abc");
+        // ==> Preparing: DELETE FROM emp WHERE ename = ? OR age LIKE ?
         // ==> Parameters: testName2(String), testName2(String), %(String)
 
         // 构建器中的第一个参数 boolean condition表示是否将此条sql语句加入要执行的语句中
@@ -152,13 +153,13 @@ public class SpringbootTests {
         // 具体结构 => src/resources/static/Wrapper结构.png
         // 具体方法 => src/resources/static/各种Wrapper主要方法.png
         // 图片转自: https://blog.csdn.net/m0_37034294/article/details/82917234
-        boolean r = usersService.remove(wrapper);
+        boolean r = empService.remove(wrapper);
         p(r);
     }
 
     public void removeById() {
-        boolean r = usersService.removeById(10);
-        // DELETE FROM mh_users WHERE ids=?
+        boolean r = empService.removeById(10);
+        // DELETE FROM emp WHERE empno=?
         p(r);
     }
 
@@ -167,17 +168,17 @@ public class SpringbootTests {
         for (int i = 0; i < 5; i++) {
             list.add(5068 + i);
         }
-        boolean r = usersService.removeByIds(list);
-        // DELETE FROM mh_users WHERE ids IN ( ? , ? , ? , ? , ? )
+        boolean r = empService.removeByIds(list);
+        // DELETE FROM emp WHERE empno IN ( ? , ? , ? , ? , ? )
         p(r);
     }
 
     public void removeByMap() {
         Map<String, Object> map = new HashMap<>();
-        map.put("rname", "测试名称5");
-        map.put("createtime", new Date());
-        boolean r = usersService.removeByMap(map);
-        // DELETE FROM mh_users WHERE createtime = ? AND rname = ?
+        map.put("ename", "测试名称5");
+        map.put("hiredate", new Date());
+        boolean r = empService.removeByMap(map);
+        // DELETE FROM emp WHERE hiredate = ? AND ename = ?
         p(r);
     }
 
@@ -186,81 +187,73 @@ public class SpringbootTests {
     //****************************************** GET *****************************************************
 
     public void getById() {
-        Users user = usersService.getById(5074);
-        // SELECT ids,uname,pword,rname,pic,userType,homeid,setups,
-        // status,createtime,creator,createname,updatetime,updator,updatename FROM mh_users WHERE ids=?
-        p(user);
+        Emp emp = empService.getById(30);
+        // SELECT empno,ename,sex,age,hiredate,sal,comm,dno FROM emp WHERE empno=?
+        p(emp);
     }
 
     public void getOne() {
-        QueryWrapper<Users> wrapper = new QueryWrapper<>();
-        wrapper.like("rname", "名称1");
-        Users user = usersService.getOne(wrapper);
-        // SELECT ids,uname,pword,rname,pic,userType,homeid,setups,status,createtime,
-        // creator,createname,updatetime,updator,updatename FROM mh_users WHERE rname LIKE ?
-        // 如果获取多条记录, 取第一个
-        p(user);
+        QueryWrapper<Emp> wrapper = new QueryWrapper<>();
+        wrapper.like("ename", "名称1");
+        Emp emp = empService.getOne(wrapper);
+        // SELECT empno,ename,sex,age,hiredate,sal,comm,dno FROM emp WHERE ename LIKE ?
+        // 如果获取多条记录, 取第一个, 没有返回null
+        p(emp);
     }
 
     public void getOne2() {
-        QueryWrapper<Users> wrapper = new QueryWrapper<>();
-        wrapper.like("rname", "名称1");
-        Users user = usersService.getOne(wrapper, true);
+        QueryWrapper<Emp> wrapper = new QueryWrapper<>();
+        wrapper.like("ename", "名称1");
+        Emp emp = empService.getOne(wrapper, true);
         // 为false时, 在查询一条记录却返回多条记录时给与一个警告, 为true时忽略此警告
-        // SELECT ids,uname,pword,rname,pic,userType,homeid,setups,status,createtime,creator,createname,
-        // updatetime,updator,updatename FROM mh_users WHERE rname LIKE ?
-        p(user);
+        // SELECT empno,ename,sex,age,hiredate,sal,comm,dno FROM emp WHERE ename LIKE ?
+        p(emp);
     }
 
     public void getMap() {
-        QueryWrapper<Users> wrapper = new QueryWrapper<>();
-        wrapper.eq("rname", "赵大帅");
-        Map<String, Object> user = usersService.getMap(wrapper);
+        QueryWrapper<Emp> wrapper = new QueryWrapper<>();
+        wrapper.eq("ename", "测试员工2");
+        Map<String, Object> empMap = empService.getMap(wrapper);
         // 将数据库表中不为null的字段组成一个Map返回
-        // SELECT ids,uname,pword,rname,pic,userType,homeid,setups,status,createtime,creator,createname,
-        // updatetime,updator,updatename FROM mh_users WHERE rname = ?
-        p(user);
+        // SELECT empno,ename,sex,age,hiredate,sal,comm,dno FROM emp WHERE ename = ?
+        p(empMap);
     }
 
     public void getObj() {
-        QueryWrapper<Users> wrapper = new QueryWrapper<>();
-        wrapper.eq("rname", "赵大帅");
-        Object user = usersService.getObj(wrapper);
+        QueryWrapper<Emp> wrapper = new QueryWrapper<>();
+        wrapper.eq("ename", "测试员工2");
+        Object emp = empService.getObj(wrapper);
         // 将数据库表中所有的字段以Object的形式返回, 并在返回多条时给与警告, 其实返回的还是一个实体类对象
-        // SELECT ids,uname,pword,rname,pic,userType,homeid,setups,status,createtime,creator,createname,
-        // updatetime,updator,updatename FROM mh_users WHERE rname = ?
-        p(user);
+        // SELECT empno,ename,sex,age,hiredate,sal,comm,dno FROM emp WHERE ename = ?
+        p(emp);
     }
 
     //****************************************** LIST *****************************************************
 
     public void list() {
-        List<Users> list = usersService.list();
-        // SELECT ids,uname,pword,rname,pic,userType,homeid,setups,status,createtime,
-        // creator,createname,updatetime,updator,updatename FROM mh_users
+        List<Emp> list = empService.list();
+        // SELECT empno,ename,sex,age,hiredate,sal,comm,dno FROM emp
         p(list);
     }
 
     public void list2() {
-        QueryWrapper<Users> wrapper = new QueryWrapper<>();
-        wrapper.eq("rname", "赵大帅");
-        List<Users> list = usersService.list(wrapper);
-        // SELECT ids,uname,pword,rname,pic,userType,homeid,setups,status,createtime,
-        // creator,createname,updatetime,updator,updatename FROM mh_users WHERE rname = ?
+        QueryWrapper<Emp> wrapper = new QueryWrapper<>();
+        wrapper.eq("ename", "测试员工2");
+        List<Emp> list = empService.list(wrapper);
+        // SELECT empno,ename,sex,age,hiredate,sal,comm,dno FROM emp where ename like ?
         p(list);
     }
 
     public void list3() {
-        Users user = new Users();
-        user.setUname("admin");
-        user.setPword("123456");
+        Emp emp = new Emp();
+        emp.setEname("admin");
+        emp.setAge(34);
 
         // Wrapper的另一种用法
         // 可以根据传入的实体类的参数生成eq("","")的语句
-        QueryWrapper<Users> wrapper = new QueryWrapper<>(user);
-        List<Users> list = usersService.list(wrapper);
-        // SELECT ids,uname,pword,rname,pic,userType,homeid,setups,status,createtime,creator,createname,
-        // updatetime,updator,updatename FROM mh_users WHERE uname=? AND pword=?
+        QueryWrapper<Emp> wrapper = new QueryWrapper<>(emp);
+        List<Emp> list = empService.list(wrapper);
+        // SELECT empno,ename,sex,age,hiredate,sal,comm,dno FROM emp WHERE ename=? AND age=?
         p(list);
     }
 
@@ -269,29 +262,26 @@ public class SpringbootTests {
         ids.add(1);
         ids.add(2);
         ids.add(3);
-        Collection<Users> c = usersService.listByIds(ids);
-        // SELECT ids,uname,pword,rname,pic,userType,homeid,setups,status,createtime,creator,
-        // createname,updatetime,updator,updatename FROM mh_users WHERE ids IN ( ? , ? , ? )
+        Collection<Emp> c = empService.listByIds(ids);
+        // SELECT empno,ename,sex,age,hiredate,sal,comm,dno FROM emp WHERE empno IN ( ? , ? , ? )
         p(c);
     }
 
     public void listByMap() {
         Map<String, Object> args = new HashMap<>();
-        args.put("uname", "Name1");
-        args.put("pword", 123123);
-        Collection<Users> c = usersService.listByMap(args);
-        // SELECT ids,uname,pword,rname,pic,userType,homeid,setups,status,createtime,creator,
-        // createname,updatetime,updator,updatename FROM mh_users WHERE uname = ? AND pword = ?
+        args.put("ename", "Name1");
+        args.put("age", 30);
+        Collection<Emp> c = empService.listByMap(args);
+        // SELECT empno,ename,sex,age,hiredate,sal,comm,dno FROM emp WHERE ename = ? AND age = ?
         // 以Map作为条件查询
         p(c);
     }
 
     public void listSearch() {
-        QueryWrapper<Users> wrapper = new QueryWrapper<>();
-        wrapper.like("uname", "Name1").eq("pword", 123123);
-        Collection<Users> c = usersService.list(wrapper);
-        // SELECT ids,uname,pword,rname,pic,userType,homeid,setups,status,createtime,creator,
-        // createname,updatetime,updator,updatename FROM mh_users WHERE uname LIKE ? AND pword = ?
+        QueryWrapper<Emp> wrapper = new QueryWrapper<>();
+        wrapper.like("ename", "Name1").eq("age", 30);
+        Collection<Emp> c = empService.list(wrapper);
+        // SELECT empno,ename,sex,age,hiredate,sal,comm,dno FROM emp WHERE ename LIKE ? AND age = ?
         p(c);
         System.out.println(wrapper.getSqlSegment());
     }
@@ -323,17 +313,17 @@ public class SpringbootTests {
         // 是否进行 count 查询
         // private boolean isSearchCount = true;
 
-        Page<Users> page = new Page<>();
-        page.setAsc("rname", "createtime");
+        Page<Emp> page = new Page<>();
+        page.setAsc("ename", "hiredate");
         page.setCurrent(3);
         page.setSize(3);
 
-        QueryWrapper<Users> wrapper = new QueryWrapper<>();
-        wrapper.select("ids", "uname", "rname", "createtime").like("uname","Name1");
-        IPage<Users> p = usersService.page(page, wrapper);
+        QueryWrapper<Emp> wrapper = new QueryWrapper<>();
+        wrapper.select("empno", "ename", "age", "comm").like("ename","员工");
+        IPage<Emp> p = empService.page(page, wrapper);
 
-        // SELECT ids,uname,rname,createtime FROM mh_users
-        // WHERE uname LIKE ? ORDER BY rname ASC,createtime ASC LIMIT ?,?
+        // SELECT COUNT(1) FROM emp WHERE ename LIKE ?
+        // SELECT empno,ename,age,comm FROM emp WHERE ename LIKE ? ORDER BY ename ASC,hiredate ASC LIMIT ?,?
 
         System.out.println(JSON.toJSONString(p.getRecords()));
         System.out.println(p.getTotal());
@@ -341,9 +331,9 @@ public class SpringbootTests {
 
     @Test
     public void pageMaps() {
-        IPage<Map<String, Object>> p = usersService.pageMaps(new Page<>());
-        // SELECT ids,uname,pword,rname,pic,userType,homeid,setups,status,createtime,creator,
-        // createname,updatetime,updator,updatename FROM mh_users LIMIT ?,?
+        IPage<Map<String, Object>> p = empService.pageMaps(new Page<>());
+        // SELECT COUNT(1) FROM emp
+        // SELECT empno,ename,sex,age,hiredate,sal,comm,dno FROM emp LIMIT ?,?
         System.out.println(JSON.toJSONString(p));
     }
 
