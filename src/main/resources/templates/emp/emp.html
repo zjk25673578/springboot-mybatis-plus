@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>thymeleaf Example - 员工信息</title>
+    <p th:include="common::baseConfig" th:remove="tag"></p>
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{'/css/emp/emp.css'}"/>
+    <script type="text/javascript" th:src="@{'/js/emp/emp.js'}"></script>
+</head>
+<body>
+<div class="layui-container">
+    <fieldset class="layui-elem-field layui-field-title">
+        <legend th:text="${label} + '员工信息'"></legend>
+    </fieldset>
+    <form th:action="@{'/emp/update'}" th:object="${emp}" method="post" class="layui-form">
+        <input type="hidden" th:value="*{empno}">
+        <!--
+            *{}只能获取th:object对象中的属性, 也能有非空判断
+        -->
+        <div class="layui-form-item">
+            <label class="layui-form-label">员工姓名</label>
+            <div class="layui-input-inline">
+                <input type="text" required lay-verify="required"
+                       class="layui-input" th:field="*{ename}"><!-- th:field可以自动添加id="ename" name="ename" value=*{ename} -->
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">年龄</label>
+            <div class="layui-input-inline">
+                <input type="text" name="age" required lay-verify="required"
+                       class="layui-input" th:value="${emp?.age}"><!-- ? 非空判断 -->
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">员工性别</label>
+            <div class="layui-input-inline">
+                <select name="sex" lay-verify="required">
+                    <option value=""></option>
+                    <option value="0" th:selected="*{sex eq 0}">女</option>
+                    <option value="1" th:selected="*{sex eq 1}">男</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">工资</label>
+            <div class="layui-input-inline">
+                <input type="text" name="sal" class="layui-input" th:value="*{sal}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">奖金</label>
+            <div class="layui-input-inline">
+                <input type="text" name="comm" class="layui-input" th:value="*{comm}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">部门</label>
+            <div class="layui-input-inline">
+                <select name="dno">
+                    <option value=""></option>
+                    <option value="0">北京</option>
+                    <option value="1">上海</option>
+                    <option value="2">广州</option>
+                    <option value="3">深圳</option>
+                    <option value="4">杭州</option>
+                </select>
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <a th:href="@{'/dept/dept'}" class="layui-btn layui-btn-xs">添加部门</a>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                <a th:href="@{'/emp/list'}" class="layui-btn layui-btn-primary">返回列表</a>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

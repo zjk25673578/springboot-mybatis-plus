@@ -17,6 +17,10 @@ public class SpringbootApplication {
         SpringApplication.run(SpringbootApplication.class, args);
     }
 
+    /**
+     * Mybatis Plus设置分页组件
+     * @return
+     */
     @Bean
     public PaginationInterceptor paginationInterceptor() {
         PaginationInterceptor page = new PaginationInterceptor();

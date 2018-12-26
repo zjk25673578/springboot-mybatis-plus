@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>消息提示</title>
+    <p th:include="common::baseConfig" th:remove="tag"></p>
+</head>
+<body>
+<div class="layui-container">
+
+    <h1>消息提示 - <span th:if="${result}">操作成功 !</span><span th:unless="${result}">操作失败 !</span></h1>
+    <hr class="layui-bg-green">
+    <a class="layui-btn" th:href="@{'/emp/list'}">返回列表</a>
+</div>
+</body>
+</html>
