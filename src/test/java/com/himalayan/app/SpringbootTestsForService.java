@@ -19,7 +19,7 @@ import java.util.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class SpringbootTests {
+public class SpringbootTestsForService {
 
     @Autowired
     private EmpService empService;
@@ -54,6 +54,8 @@ public class SpringbootTests {
         }
     }
 
+    //************************************************** SAVE_AND_UPDATE *****************************************************
+
     public void save() {
         boolean r = empService.save(e);
         // 添加进数据库之后可以拿到主键
@@ -61,8 +63,6 @@ public class SpringbootTests {
         System.out.println(r);
         System.out.println(e.getEmpno());
     }
-
-    //************************************************** SAVE_AND_UPDATE *****************************************************
 
     public void saveOrUpdate() {
         // boolean r = empService.saveOrUpdate(e);
