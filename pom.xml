@@ -14,8 +14,8 @@
     <name>springboot-mybatis-plus</name>
     <description>springboot和mybatis-plus测试项目</description>
 
-    <packaging>war</packaging>
-    <!--<packaging>jar</packaging>-->
+    <!--<packaging>war</packaging>-->
+    <packaging>jar</packaging>
 
     <properties>
         <java.version>1.8</java.version>
@@ -43,6 +43,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
+            <!--<version>5.1.47</version>-->
             <scope>runtime</scope>
         </dependency>
         <dependency>
@@ -87,6 +88,7 @@
     </dependencies>
 
     <build>
+        <finalName>sbmp</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -102,13 +104,15 @@
                     <include>**/*.java</include>
                 </includes>
             </resource>
-<!--            <resource>
+            <resource> <!-- 之前报错failed to determine a suitable driver class是因为将这个标签注释掉了, 导致maven读取不到配置文件 -->
                 <directory>src/main/resources</directory>
                 <includes>
-                    <include>**/*.properties</include>
+                    <!--<include>**/*.properties</include>
                     <include>**/*.xml</include>
+                    <include>**/*.html</include>-->
+                    <include>**/*.*</include>
                 </includes>
-            </resource>-->
+            </resource>
         </resources>
     </build>
 
